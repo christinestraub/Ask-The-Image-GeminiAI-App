@@ -1,4 +1,4 @@
-Ask The Image - Gemini AI App
+Gemini AI App (Image to Text)
 =========================
 
 This repository contains the code for an image annotation app that uses the Gemini AI model to generate annotations for images. The app allows users to upload images and input a natural language description of the objects or features they want to get description from the image. The model then generates the corresponding annotations and overlays them on the image.
