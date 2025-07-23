@@ -58,9 +58,3 @@ Built With
 -   [Python](https://www.python.org/) - Programming language
 -   [Streamlit](https://streamlit.com/) - Web framework
 -   [Gemini AI Model](https://huggingface.co/babelscape/gemini) - AI model for generating image annotations
-
-
-License
--------
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
