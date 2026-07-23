@@ -1,60 +1,82 @@
-Gemini AI App (Image to Text)
-=========================
+# Ask the Image
 
-This repository contains the code for an image annotation app that uses the Gemini AI model to generate annotations for images. The app allows users to upload images and input a natural language description of the objects or features they want to get description from the image. The model then generates the corresponding annotations and overlays them on the image.
+A client-facing visual-analysis demo built with Next.js and Gemini. Upload a
+JPEG, PNG, or WebP image to receive structured findings, an optional answer to
+a focused question, explicit uncertainty, and safety notes.
 
-Getting Started
----------------
+## What it demonstrates
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+- Ephemeral, server-only multimodal analysis with `@google/genai`
+- MIME, byte-size, image-signature, dimension, and schema validation
+- Structured results instead of unbounded model text
+- Accessible upload, progress, error, retry, and responsive result states
+- Request IDs and redacted operational logs
+- Vercel Preview and Production deployments with WAF rate limiting
 
-### Prerequisites
+Images are decoded and normalized in memory. They are not written to disk,
+uploaded to a persistent file service, or included in application logs.
 
-What things you need to install the software and how to install them
+## Local development
 
--   Python 3.9
--   pip (Python package manager)
--   virtualenv (Python virtual environment manager)
+Use Node.js 24 and pnpm 11.17.0.
 
-### Installing
-
-A step by step series of examples that tell you how to get a development environment running
-
-1. Clone the repository to your local machine
-
-```
-git clone https://github.com/christinestraub/Ask-The-Image-GeminiAI-App.git
-```
-
-2. Create a virtual environment and activate it
-
-```
-virtualenv venv
-source venv/bin/activate
+```bash
+pnpm install
+cp .env.example .env.local
+pnpm dev
 ```
 
-3. Install the required packages
+Set `GEMINI_API_KEY` in `.env.local`. The key must be restricted to the Gemini
+API and must never use a `NEXT_PUBLIC_` prefix.
 
-```
-pip install -r requirements.txt
-```
+The optional variables are:
 
-4. Copy the Gemini AI AAPI KEY from Google AI Studio.
-
-5. Run the app
-
-```
-python app.py
+```dotenv
+GEMINI_MODEL=gemini-3.6-flash
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Using the App
--------------
+## Verification
 
-The app will prompt you to upload an image and enter a natural language description of the objects or features you want to annotate in the image. For example, you might upload a picture of a kitchen and enter "Show me the locations and labels of all appliances in the image." The model will then generate the corresponding annotations and display them on the image.
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
 
-Built With
-----------
+Browser tests mock Gemini responses. A single controlled live-provider check is
+performed during Vercel Preview QA.
 
--   [Python](https://www.python.org/) - Programming language
--   [Streamlit](https://streamlit.com/) - Web framework
--   [Gemini AI Model](https://huggingface.co/babelscape/gemini) - AI model for generating image annotations
+## API
+
+`POST /api/analyze-image` accepts `multipart/form-data`:
+
+- `image`: required JPEG, PNG, or WebP; maximum 4 MB and 16 megapixels
+- `question`: optional text; maximum 500 characters
+
+Successful responses contain a request ID, summary, optional answer, detected
+details with qualitative confidence, uncertainty, and safety notes. Errors use
+a stable code, safe message, retryability flag, and request ID.
+
+## Deployment
+
+The production deployment is an isolated Vercel project. Configure these
+variables for both Preview and Production:
+
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL=gemini-3.6-flash`
+- `NEXT_PUBLIC_SITE_URL` using the environment's public URL
+
+Apply a Vercel WAF rate-limit rule to `/api/analyze-image`: five requests per
+minute per IP. The route also has a 30-second function limit and a 25-second
+provider timeout.
+
+## Security history notice
+
+On July 23, 2026, repository history was rewritten to remove a previously
+tracked, invalid Google API key. Existing clones from before that rewrite must
+be discarded and freshly cloned. Do not merge or push branches created from
+the old history.

@@ -1,0 +1,12 @@
+allowBuilds:
+  "@google/genai": true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true
+
+engineStrict: true
+nodeVersion: 24.18.0
+overrides:
+  postcss: 8.5.12
+  sharp: 0.35.3
+savePrefix: ""
