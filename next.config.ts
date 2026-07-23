@@ -29,6 +29,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
+  outputFileTracingIncludes: {
+    "/api/analyze-image": [
+      "./node_modules/@img/sharp-libvips-linux-x64/**/*",
+    ],
+  },
   poweredByHeader: false,
   reactStrictMode: true,
   async headers() {
