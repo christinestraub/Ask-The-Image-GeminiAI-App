@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ask The Image GeminiAI App"
+  short_description: "Repo-specific patterns and workflows for Ask-The-Image-GeminiAI-App"
+  default_prompt: "Use the Ask-The-Image-GeminiAI-App repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
